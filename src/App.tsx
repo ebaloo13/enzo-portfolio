@@ -1,4 +1,5 @@
 import type { SimpleIcon } from 'simple-icons'
+import { useState } from 'react'
 import {
   siFastapi,
   siGit,
@@ -20,41 +21,45 @@ import {
 const projects = [
   {
     title: 'Shopify Rider Profile & Booking Coordination App',
+    summary: 'Shopify workflow for rider profiles, booking context, and admin coordination.',
     problem:
       'Rider details, customer context, and booking notes can become scattered across separate tools.',
     built:
       'A Shopify app workflow for rider profiles, booking coordination, and admin handoffs.',
-    tech: 'React, TypeScript, Node.js, GraphQL, Shopify Admin API, Customer Account UI Extensions',
+    stack: 'React, TypeScript, Node.js, GraphQL, Shopify Admin API, Customer Account UI Extensions',
     learning:
       'Customer-facing UX and admin workflows need to be designed together.',
   },
   {
     title: 'AI-Assisted SLR Screening Workflow',
+    summary: 'Structured AI workflow for PDF parsing, extraction, validation, and review.',
     problem:
       'Screening slows down when papers must be parsed, classified, and checked manually.',
     built:
       'A structured workflow for parsing PDFs, extracting fields, and validating outputs.',
-    tech: 'Python, FastAPI, OpenAI Structured Outputs, JSON Schema, PDF parsing, validation',
+    stack: 'Python, FastAPI, OpenAI Structured Outputs, JSON Schema, PDF parsing, validation',
     learning:
       'AI output is more useful when constrained, validated, and review-ready.',
   },
   {
     title: 'AI Agent Workflow System',
+    summary: 'Agent workflow design for structured context, artifacts, and validation.',
     problem:
       'Agent workflows break down when context, artifacts, and validation are unclear.',
     built:
       'A workflow for decomposing tasks, passing context, producing artifacts, and checking results.',
-    tech: 'Agent workflow design, OpenAI, Claude, JSON Schema, validation, artifacts',
+    stack: 'Agent workflow design, OpenAI, Claude, JSON Schema, validation, artifacts',
     learning:
       'Reliable agentic systems need explicit handoffs and deterministic checks.',
   },
   {
     title: 'Internal Business Systems',
+    summary: 'Full-stack internal tools for API-connected business operations.',
     problem:
       'Teams lose time when operations depend on spreadsheets and disconnected tools.',
     built:
       'Internal tools for organizing data, connecting APIs, and automating repeatable steps.',
-    tech: 'React, TypeScript, Node.js, REST APIs, Prisma, SQLite, GitHub Actions',
+    stack: 'React, TypeScript, Node.js, REST APIs, Prisma, SQLite, GitHub Actions',
     learning:
       'Useful internal tools match the workflow first, then add automation.',
   },
@@ -157,6 +162,12 @@ const links = [
 ]
 
 function App() {
+  const [openProjectIndex, setOpenProjectIndex] = useState<number | null>(null)
+
+  const toggleProject = (index: number) => {
+    setOpenProjectIndex((currentIndex) => (currentIndex === index ? null : index))
+  }
+
   return (
     <main className="min-h-screen overflow-hidden bg-[#080b10] text-slate-200">
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-6 sm:px-8">
@@ -252,30 +263,79 @@ function App() {
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-300">Selected projects</p>
           <h2 className="mt-4 text-3xl font-semibold text-white sm:text-4xl">Mini case studies from practical builds.</h2>
         </div>
-        <div className="mt-10 grid gap-4 md:grid-cols-2">
-          {projects.map((project) => (
-            <article key={project.title} className="rounded-lg border border-white/10 bg-white/[0.03] p-6 transition hover:border-sky-300/40 hover:bg-white/[0.05]">
-              <h3 className="text-xl font-semibold text-white">{project.title}</h3>
-              <dl className="mt-6 grid gap-5 text-sm leading-6">
+        <div className="mt-10 grid gap-4">
+          {projects.map((project, index) => {
+            const isOpen = openProjectIndex === index
+            const detailsId = `project-details-${index}`
+
+            return (
+            <article
+              key={project.title}
+              role="button"
+              tabIndex={0}
+              aria-expanded={isOpen}
+              aria-controls={detailsId}
+              onClick={() => toggleProject(index)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  toggleProject(index)
+                }
+              }}
+              className={`group cursor-pointer rounded-lg border bg-white/[0.03] p-6 text-left outline-none transition duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 ${
+                isOpen
+                  ? 'border-cyan-300/35 shadow-[0_0_32px_rgba(34,211,238,0.08)]'
+                  : 'border-white/10 hover:border-sky-300/35 hover:bg-white/[0.05]'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-5">
                 <div>
-                  <dt className="font-semibold text-sky-200">Problem</dt>
-                  <dd className="mt-1 text-slate-400">{project.problem}</dd>
+                  <h3 className="text-xl font-semibold text-white">{project.title}</h3>
+                  <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-400">{project.summary}</p>
                 </div>
-                <div>
-                  <dt className="font-semibold text-sky-200">Built</dt>
-                  <dd className="mt-1 text-slate-400">{project.built}</dd>
+                <div className="flex shrink-0 items-center gap-2 pt-1 text-sm font-semibold text-cyan-200">
+                  <span className="hidden sm:inline">{isOpen ? 'Close details' : 'View details'}</span>
+                  <span
+                    aria-hidden="true"
+                    className={`flex h-8 w-8 items-center justify-center rounded-md border border-cyan-300/20 bg-cyan-300/10 text-lg leading-none transition duration-300 ${
+                      isOpen ? 'rotate-45 border-cyan-300/40 bg-cyan-300/15' : 'group-hover:border-cyan-300/35'
+                    }`}
+                  >
+                    +
+                  </span>
                 </div>
-                <div>
-                  <dt className="font-semibold text-sky-200">Tech</dt>
-                  <dd className="mt-1 text-slate-400">{project.tech}</dd>
+              </div>
+
+              <div
+                id={detailsId}
+                className={`grid transition-all duration-300 ease-out ${
+                  isOpen ? 'mt-6 grid-rows-[1fr] opacity-100' : 'mt-0 grid-rows-[0fr] opacity-0'
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <dl className="grid gap-5 border-t border-white/10 pt-6 text-sm leading-6 md:grid-cols-2">
+                    <div>
+                      <dt className="font-semibold text-sky-200">Problem</dt>
+                      <dd className="mt-1 text-slate-400">{project.problem}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-semibold text-sky-200">Built</dt>
+                      <dd className="mt-1 text-slate-400">{project.built}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-semibold text-sky-200">Stack</dt>
+                      <dd className="mt-1 text-slate-400">{project.stack}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-semibold text-sky-200">Key learning</dt>
+                      <dd className="mt-1 text-slate-400">{project.learning}</dd>
+                    </div>
+                  </dl>
                 </div>
-                <div>
-                  <dt className="font-semibold text-sky-200">Key learning</dt>
-                  <dd className="mt-1 text-slate-400">{project.learning}</dd>
-                </div>
-              </dl>
+              </div>
             </article>
-          ))}
+            )
+          })}
         </div>
       </section>
 
