@@ -1,3 +1,22 @@
+import type { SimpleIcon } from 'simple-icons'
+import {
+  siFastapi,
+  siGit,
+  siGithub,
+  siGithubactions,
+  siGraphql,
+  siN8n,
+  siNodedotjs,
+  siPrisma,
+  siPython,
+  siReact,
+  siShopify,
+  siSqlite,
+  siTailwindcss,
+  siTypescript,
+  siVercel,
+} from 'simple-icons/icons'
+
 const projects = [
   {
     title: 'Shopify Rider Profile & Booking Coordination App',
@@ -76,31 +95,60 @@ const proofItems = [
   { label: 'Internal business operations systems' },
 ]
 
-const technologies = [
-  { icon: 'R', name: 'React' },
-  { icon: 'TS', name: 'TypeScript' },
-  { icon: 'N', name: 'Node.js' },
-  { icon: 'GQL', name: 'GraphQL' },
-  { icon: 'API', name: 'REST APIs' },
-  { icon: 'PY', name: 'Python' },
-  { icon: 'FA', name: 'FastAPI' },
-  { icon: 'AI', name: 'OpenAI' },
-  { icon: 'SO', name: 'OpenAI Structured Outputs' },
-  { icon: 'CL', name: 'Claude' },
-  { icon: '{}', name: 'JSON Schema' },
-  { icon: 'S', name: 'Shopify' },
-  { icon: 'ADM', name: 'Shopify Admin API' },
-  { icon: 'UI', name: 'Customer Account UI Extensions' },
-  { icon: 'DB', name: 'Prisma' },
-  { icon: 'SQL', name: 'SQLite' },
-  { icon: 'GIT', name: 'Git' },
-  { icon: 'GH', name: 'GitHub' },
-  { icon: 'CI', name: 'GitHub Actions' },
-  { icon: 'C', name: 'Cursor' },
-  { icon: 'N8N', name: 'n8n' },
-  { icon: 'V', name: 'Vercel' },
-  { icon: 'TW', name: 'Tailwind' },
+type Technology =
+  | {
+      name: string
+      icon: SimpleIcon
+      type: 'logo'
+      category: string
+    }
+  | {
+      name: string
+      initials: string
+      type: 'badge'
+      category: string
+    }
+
+const technologies: Technology[] = [
+  { name: 'React', icon: siReact, type: 'logo', category: 'Frontend' },
+  { name: 'TypeScript', icon: siTypescript, type: 'logo', category: 'Language' },
+  { name: 'Node.js', icon: siNodedotjs, type: 'logo', category: 'Backend' },
+  { name: 'GraphQL', icon: siGraphql, type: 'logo', category: 'API' },
+  { name: 'REST APIs', initials: 'API', type: 'badge', category: 'API' },
+  { name: 'Python', icon: siPython, type: 'logo', category: 'Language' },
+  { name: 'FastAPI', icon: siFastapi, type: 'logo', category: 'Backend' },
+  { name: 'OpenAI', initials: 'AI', type: 'badge', category: 'AI' },
+  { name: 'Claude', initials: 'CL', type: 'badge', category: 'AI' },
+  { name: 'OpenAI Structured Outputs', initials: 'SO', type: 'badge', category: 'AI' },
+  { name: 'JSON Schema', initials: '{}', type: 'badge', category: 'Validation' },
+  { name: 'Shopify', icon: siShopify, type: 'logo', category: 'Commerce' },
+  { name: 'Shopify Admin API', initials: 'ADM', type: 'badge', category: 'Commerce' },
+  { name: 'Customer Account UI Extensions', initials: 'UI', type: 'badge', category: 'Commerce' },
+  { name: 'Prisma', icon: siPrisma, type: 'logo', category: 'Database' },
+  { name: 'SQLite', icon: siSqlite, type: 'logo', category: 'Database' },
+  { name: 'Git', icon: siGit, type: 'logo', category: 'Workflow' },
+  { name: 'GitHub', icon: siGithub, type: 'logo', category: 'Workflow' },
+  { name: 'GitHub Actions', icon: siGithubactions, type: 'logo', category: 'CI/CD' },
+  { name: 'Cursor', initials: 'CU', type: 'badge', category: 'Development' },
+  { name: 'n8n', icon: siN8n, type: 'logo', category: 'Automation' },
+  { name: 'Vercel', icon: siVercel, type: 'logo', category: 'Deployment' },
+  { name: 'Tailwind', icon: siTailwindcss, type: 'logo', category: 'Styling' },
 ]
+
+function SimpleIconMark({ icon, label }: { icon: SimpleIcon; label: string }) {
+  return (
+    <svg
+      aria-label={label}
+      className="tech-card__svg"
+      role="img"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title>{label}</title>
+      <path d={icon.path} fill={`#${icon.hex}`} />
+    </svg>
+  )
+}
 
 const links = [
   { label: 'GitHub', href: 'https://github.com/ebaloo13' },
@@ -289,18 +337,24 @@ function App() {
               A focused stack for AI automation, Shopify apps, API integrations, and internal workflow systems.
             </p>
           </div>
-          <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
-            {technologies.map((technology) => (
-              <div
-                key={technology.name}
-                className="group rounded-lg border border-white/10 bg-white/[0.045] p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)_inset] backdrop-blur transition hover:border-cyan-300/40 hover:bg-cyan-300/[0.06] hover:shadow-[0_0_28px_rgba(34,211,238,0.08)]"
-              >
-                <div className="flex h-9 w-9 items-center justify-center rounded-md border border-cyan-300/20 bg-cyan-300/10 text-xs font-semibold text-cyan-200 transition group-hover:border-cyan-300/40 group-hover:bg-cyan-300/15">
-                  {technology.icon}
-                </div>
-                <p className="mt-4 text-sm font-semibold text-white">{technology.name}</p>
-              </div>
-            ))}
+          <div className="tech-marquee mt-10" aria-label="Technologies and tools carousel">
+            <div className="tech-marquee__track">
+              {[...technologies, ...technologies].map((technology, index) => (
+                <article className="tech-card" key={`${technology.name}-${index}`} aria-hidden={index >= technologies.length}>
+                  <div className="tech-card__icon">
+                    {technology.type === 'logo' ? (
+                      <SimpleIconMark icon={technology.icon} label={technology.name} />
+                    ) : (
+                      <span aria-hidden="true">{technology.initials}</span>
+                    )}
+                  </div>
+                  <div>
+                    <h3>{technology.name}</h3>
+                    <p>{technology.category}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
